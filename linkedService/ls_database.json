@@ -1,0 +1,17 @@
+{
+	"name": "ls_database",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "adfproramserver.database.windows.net",
+			"database": "adfprodb",
+			"encrypt": "optional",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "ramadmin",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDkyMjhFOEIzLTg3QjUtNEI1RS1BMjk1LTg1NjRBMTU5QkEwOF9mMzUyYzg4Ni0zMDI4LTQ0MGEtOTFjZi04NDA5ZDcyZGQ0NjQiDQp9"
+		}
+	}
+}
