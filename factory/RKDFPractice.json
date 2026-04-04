@@ -1,0 +1,9 @@
+{
+	"name": "RKDFPractice",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d7cebee1-7db7-42fb-85ea-3ebeb9b6990f",
+		"tenantId": "4a5f7bc0-d0c0-4381-8a4f-2af5d3ef3b20"
+	}
+}
