@@ -19,7 +19,9 @@
 						"referenceName": "ds_salesmetadata",
 						"type": "DatasetReference"
 					},
-					"fieldList": [],
+					"fieldList": [
+						"childItems"
+					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
 						"enablePartitionDiscovery": false
@@ -58,7 +60,16 @@
 								"secureOutput": false,
 								"secureInput": false
 							},
-							"userProperties": [],
+							"userProperties": [
+								{
+									"name": "Source",
+									"value": "@{'source'}/@{'Sales'}/@{concat('sales_', pipeline().parameters.p_sales_date, '.csv')}"
+								},
+								{
+									"name": "Destination",
+									"value": "dbo.Sales"
+								}
+							],
 							"typeProperties": {
 								"source": {
 									"type": "DelimitedTextSource",
@@ -73,8 +84,15 @@
 								},
 								"sink": {
 									"type": "AzureSqlSink",
-									"writeBehavior": "insert",
-									"sqlWriterUseTableLock": false
+									"writeBehavior": "upsert",
+									"upsertSettings": {
+										"useTempDB": true,
+										"keys": [
+											"SaleId"
+										]
+									},
+									"sqlWriterUseTableLock": false,
+									"disableMetricsCollection": false
 								},
 								"enableStaging": false,
 								"translator": {
@@ -94,7 +112,7 @@
 										"p_container": "source",
 										"p_folder": "Sales",
 										"p_file": {
-											"value": "@item().name",
+											"value": "sales_@{pipeline().parameters.p_sales_date}.csv.txt",
 											"type": "Expression"
 										}
 									}
@@ -102,7 +120,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "AzureSqlCutomers",
+									"referenceName": "AzureSqlSales",
 									"type": "DatasetReference"
 								}
 							]
@@ -111,6 +129,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"p_sales_date": {
+				"type": "string",
+				"defaultValue": "\"2026-04-01\""
+			}
+		},
 		"annotations": []
 	}
 }
