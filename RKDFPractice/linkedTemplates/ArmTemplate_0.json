@@ -559,6 +559,10 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "sales_@{pipeline().parameters.p_sales_date}.csv.txt",
+							"type": "Expression"
+						},
 						"folderPath": "Sales",
 						"fileSystem": "source"
 					},
