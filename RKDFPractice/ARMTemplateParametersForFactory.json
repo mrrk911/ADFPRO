@@ -20,6 +20,9 @@
 		"ls_practice_accountKey": {
 			"value": ""
 		},
+		"ls_sales_data_accountKey": {
+			"value": ""
+		},
 		"AzureSqlDbLS_properties_typeProperties_server": {
 			"value": "rkpracticeserver.database.windows.net"
 		},
@@ -55,6 +58,9 @@
 		},
 		"schedule_properties_Scheduled_parameters_table": {
 			"value": "Orders"
+		},
+		"ls_sales_data_properties_typeProperties_url": {
+			"value": "https://dfstoragepractice.dfs.core.windows.net/"
 		}
 	}
 }
