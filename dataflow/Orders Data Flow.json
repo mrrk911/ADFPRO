@@ -14,16 +14,16 @@
 			],
 			"sinks": [
 				{
-					"linkedService": {
-						"referenceName": "AzureDataLakeStorage",
-						"type": "LinkedServiceReference"
+					"dataset": {
+						"referenceName": "OrdersJson",
+						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sink"
 				}
 			],
 			"transformations": [
 				{
-					"name": "filter1"
+					"name": "filter"
 				}
 			],
 			"scriptLines": [
@@ -41,19 +41,16 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source",
-				"source filter(LastModifiedDate > toDate($LastWatermark)) ~> filter1",
-				"filter1 sink(allowSchemaDrift: true,",
+				"source filter(LastModifiedDate > toDate($LastWatermark)) ~> filter",
+				"filter sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     format: 'json',",
-				"     fileSystem: 'sink',",
-				"     folderPath: 'Orders',",
 				"     partitionFileNames:[($FileName)],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> sink1"
+				"     partitionBy('hash', 1)) ~> sink"
 			]
 		}
 	}
