@@ -12,7 +12,15 @@
 					"name": "source"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [],
 			"scriptLines": [
 				"parameters{",
@@ -28,7 +36,21 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     query: (SELECT * \\r\\nFROM dbo.Orders \\r\\nWHERE LastModifiedDate > '$LastWatermark'),",
-				"     format: 'query') ~> source"
+				"     format: 'query') ~> source",
+				"source sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     partitionFileNames:[(@concat(\r",
+				"  'Orders_',\r",
+				"  formatDateTime(pipeline().parameters.LastWatermark, 'yyyy-MM-dd'),\r",
+				"  '.json'\r",
+				"))],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
