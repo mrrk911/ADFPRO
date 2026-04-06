@@ -141,7 +141,7 @@
 				"typeProperties": {
 					"storedProcedureName": "[dbo].[usp_UpdateWatermark]",
 					"storedProcedureParameters": {
-						"@LastModifiedDate": {
+						"LastModifiedDate": {
 							"value": {
 								"value": "@activity('FileNameGenerator').output.firstRow.MaxDate",
 								"type": "Expression"
@@ -197,11 +197,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"FileName": {
-				"type": "string"
-			}
-		},
 		"annotations": []
 	}
 }
