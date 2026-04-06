@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "RKDFPractice"
 		},
+		"AzureDataLakeStorage_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage'"
+		},
 		"ds_csv_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ds_csv'"
@@ -30,6 +34,10 @@
 		"ls_sales_data_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_sales_data'"
+		},
+		"AzureDataLakeStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dfstoragepractice.dfs.core.windows.net/"
 		},
 		"AzureSqlDbLS_properties_typeProperties_server": {
 			"type": "string",
@@ -71,6 +79,10 @@
 			"type": "string",
 			"defaultValue": "https://dfpracticestorage.dfs.core.windows.net/"
 		},
+		"ls_sales_data_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dfstoragepractice.dfs.core.windows.net/"
+		},
 		"schedule_properties_Scheduled_parameters_schema": {
 			"type": "string",
 			"defaultValue": "source"
@@ -78,10 +90,6 @@
 		"schedule_properties_Scheduled_parameters_table": {
 			"type": "string",
 			"defaultValue": "Orders"
-		},
-		"ls_sales_data_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://dfstoragepractice.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"type": "string",
@@ -110,6 +118,9 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"AzureDataLakeStorage_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage_accountKey')]"
+					},
 					"ds_csv_accountKey": {
 						"value": "[parameters('ds_csv_accountKey')]"
 					},
@@ -127,6 +138,9 @@
 					},
 					"ls_sales_data_accountKey": {
 						"value": "[parameters('ls_sales_data_accountKey')]"
+					},
+					"AzureDataLakeStorage_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage_properties_typeProperties_url')]"
 					},
 					"AzureSqlDbLS_properties_typeProperties_server": {
 						"value": "[parameters('AzureSqlDbLS_properties_typeProperties_server')]"

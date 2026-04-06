@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "RKDFPractice"
 		},
+		"AzureDataLakeStorage_accountKey": {
+			"value": ""
+		},
 		"ds_csv_accountKey": {
 			"value": ""
 		},
@@ -22,6 +25,9 @@
 		},
 		"ls_sales_data_accountKey": {
 			"value": ""
+		},
+		"AzureDataLakeStorage_properties_typeProperties_url": {
+			"value": "https://dfstoragepractice.dfs.core.windows.net/"
 		},
 		"AzureSqlDbLS_properties_typeProperties_server": {
 			"value": "rkpracticeserver.database.windows.net"
@@ -53,14 +59,14 @@
 		"ls_practice_properties_typeProperties_url": {
 			"value": "https://dfpracticestorage.dfs.core.windows.net/"
 		},
+		"ls_sales_data_properties_typeProperties_url": {
+			"value": "https://dfstoragepractice.dfs.core.windows.net/"
+		},
 		"schedule_properties_Scheduled_parameters_schema": {
 			"value": "source"
 		},
 		"schedule_properties_Scheduled_parameters_table": {
 			"value": "Orders"
-		},
-		"ls_sales_data_properties_typeProperties_url": {
-			"value": "https://dfstoragepractice.dfs.core.windows.net/"
 		}
 	}
 }
