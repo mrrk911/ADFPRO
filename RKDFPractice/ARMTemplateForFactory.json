@@ -319,7 +319,12 @@
 								},
 								"datasetParameters": {
 									"source": {},
-									"sink1": {}
+									"sink": {}
+								},
+								"linkedServiceParameters": {
+									"sink": {
+										"schemaLinkedService": {}
+									}
 								}
 							},
 							"staging": {},
@@ -2675,12 +2680,12 @@
 								"referenceName": "AzureDataLakeStorage",
 								"type": "LinkedServiceReference"
 							},
-							"name": "sink1"
+							"name": "sink"
 						}
 					],
 					"transformations": [
 						{
-							"name": "filter1"
+							"name": "filter"
 						}
 					],
 					"scriptLines": [
@@ -2698,8 +2703,8 @@
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
 						"     format: 'table') ~> source",
-						"source filter(LastModifiedDate > toDate($LastWatermark)) ~> filter1",
-						"filter1 sink(allowSchemaDrift: true,",
+						"source filter(LastModifiedDate > toDate($LastWatermark)) ~> filter",
+						"filter sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'json',",
 						"     fileSystem: 'sink',",
@@ -2710,7 +2715,7 @@
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     partitionBy('hash', 1)) ~> sink1"
+						"     partitionBy('hash', 1)) ~> sink"
 					]
 				}
 			},
