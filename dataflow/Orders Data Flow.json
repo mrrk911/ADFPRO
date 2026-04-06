@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "Orders Data Flow",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -21,7 +21,11 @@
 					"name": "sink1"
 				}
 			],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "filter1"
+				}
+			],
 			"scriptLines": [
 				"parameters{",
 				"     LastWatermark as string",
@@ -35,14 +39,16 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: (SELECT * \\r\\nFROM dbo.Orders \\r\\nWHERE LastModifiedDate > '$LastWatermark'),",
-				"     format: 'query') ~> source",
-				"source sink(allowSchemaDrift: true,",
+				"     format: 'table') ~> source",
+				"source filter(LastModifiedDate > toDate($LastWatermark)) ~> filter1",
+				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'json',",
+				"     fileSystem: 'sink',",
+				"     folderPath: 'Orders',",
 				"     partitionFileNames:[(@concat(\r",
 				"  'Orders_',\r",
-				"  formatDateTime(pipeline().parameters.LastWatermark, 'yyyy-MM-dd'),\r",
+				"  formatDateTime(activity('FileNameGenerator').output, 'yyyy-MM-dd'),\r",
 				"  '.json'\r",
 				"))],",
 				"     umask: 0022,",
