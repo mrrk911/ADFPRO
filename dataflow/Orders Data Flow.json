@@ -28,7 +28,8 @@
 			],
 			"scriptLines": [
 				"parameters{",
-				"     LastWatermark as string",
+				"     LastWatermark as string,",
+				"     FileName as string",
 				"}",
 				"source(output(",
 				"          OrderID as integer,",
