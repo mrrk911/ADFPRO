@@ -1,0 +1,207 @@
+{
+	"name": "Incremental Load",
+	"properties": {
+		"activities": [
+			{
+				"name": "WaterMark",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT LastModifieddate FROM dbo.WaterMark WHERE Name = 'Incremental Load'",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlWaterMark",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Copy Orders",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "@concat(\n  'SELECT * FROM dbo.Orders WHERE LastModifiedDate > ''',\n  activity('WaterMark').output.firstRow.LastModifieddate,\n  ''''\n)",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "AzureSqlOrders",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "OrdersJson",
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": {
+								"value": "@concat(\n    'Orders_',\n    Formatdatetime(activity('FileNameGenerator').output.firstRow.Maxdate, 'yyyy-MM-dd'), '.json'\n)",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "FileNameGenerator",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "WaterMark",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "@concat(\n  'SELECT MAX(LastModifiedDate) AS MaxDate FROM dbo.Orders WHERE LastModifiedDate > ''',\n  activity('WaterMark').output.firstRow.LastModifieddate,\n  ''''\n)",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlOrders",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Stored procedure",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Orders Data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[usp_UpdateWatermark]",
+					"storedProcedureParameters": {
+						"@LastModifiedDate": {
+							"value": {
+								"value": "@activity('FileNameGenerator').output.firstRow.MaxDate",
+								"type": "Expression"
+							},
+							"type": "Datetime"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDbLS",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Orders Data",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "FileNameGenerator",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "Orders Data Flow",
+						"type": "DataFlowReference",
+						"parameters": {
+							"LastWatermark": {
+								"value": "'@{activity('WaterMark').output.firstRow.LastModifieddate}'",
+								"type": "Expression"
+							},
+							"FileName": {
+								"value": "'@{concat(\n  'Orders_',\n  formatDateTime(activity('FileNameGenerator').output.firstRow.MaxDate, 'yyyy-MM-dd'),\n  '.json'\n)}'",
+								"type": "Expression"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"parameters": {
+			"FileName": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}

@@ -1,0 +1,30 @@
+{
+	"name": "AzureSqlWaterMark",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDbLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Name",
+				"type": "varchar"
+			},
+			{
+				"name": "LastModifieddate",
+				"type": "date"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "WaterMark"
+		}
+	}
+}
