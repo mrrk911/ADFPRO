@@ -14,9 +14,9 @@
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "OrdersJson",
-						"type": "DatasetReference"
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage",
+						"type": "LinkedServiceReference"
 					},
 					"name": "sink"
 				}
@@ -44,6 +44,9 @@
 				"source filter(LastModifiedDate > toDate($LastWatermark)) ~> filter",
 				"filter sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'json',",
+				"     fileSystem: 'sink',",
+				"     folderPath: 'Orders',",
 				"     partitionFileNames:[($FileName)],",
 				"     umask: 0022,",
 				"     preCommands: [],",
