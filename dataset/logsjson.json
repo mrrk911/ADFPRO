@@ -1,0 +1,32 @@
+{
+	"name": "logsjson",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "logs.json.txt",
+				"fileSystem": "source"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"userId": {
+					"type": "string"
+				},
+				"action": {
+					"type": "string"
+				},
+				"timestamp": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
