@@ -1,0 +1,33 @@
+{
+	"name": "ds_fileslist",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@item().FileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@split(item().SourcePath,'/')[2]\n",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@split(item().SourcePath,'/')[1]\n",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
